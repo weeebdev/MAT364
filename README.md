@@ -33,8 +33,13 @@ mat354/
 │   ├── lecture1.md              # Introduction to Cryptography
 │   ├── lecture2.md              # Classical Ciphers
 │   ├── lecture3.md              # Cryptanalysis and Attacks
+│   ├── lecture4.md              # Stream Ciphers and Modern Symmetric Encryption
+│   ├── lecture5.md              # Public Key Cryptography and Asymmetric Encryption
 │   ├── kasiski-method.md        # Deep dive: Kasiski Method
-│   ├── CS_Cryptography_Syllabus.md
+│   ├── syllabus.md              # Course syllabus (Slidev presentation)
+│   ├── CS_Cryptography_Syllabus.md  # Detailed course syllabus (plain markdown)
+│   ├── build-pdfs.sh            # Automated PDF generation script
+│   ├── pdf-exports/             # Generated PDF files
 │   └── dist/                    # Built presentation files
 ├── old/                         # Previous course materials
 │   ├── L1 Introduction to Cryptography.pdf
@@ -60,15 +65,15 @@ mat354/
 - **Practical:** Create frequency analysis tools, implement timing attacks
 - **Advanced:** Modern attack vectors and defensive measures
 
-### Week 4: Stream Ciphers and One-Time Pads
-- **Topics:** Stream ciphers, pseudorandom number generators, RC4, ChaCha20
-- **Practical:** Implement stream ciphers, test random number generators
-- **Security:** Perfect secrecy and its limitations
+### Week 4: Stream Ciphers and Modern Symmetric Encryption
+- **Topics:** Stream ciphers, LFSR, RC4, ChaCha20, block cipher modes (ECB, CBC, GCM), AES
+- **Practical:** Implement stream ciphers, block cipher modes, AES encryption
+- **Security:** Pattern analysis, timing attacks, authenticated encryption
 
-### Week 5: Block Ciphers and Applications
-- **Topics:** Block cipher principles, modes (ECB, CBC, GCM), AES implementation
-- **Practical:** Implement block ciphers, compare operation modes
-- **Real-world:** File encryption applications
+### Week 5: Public Key Cryptography and Asymmetric Encryption
+- **Topics:** RSA algorithm, elliptic curve cryptography, digital signatures, key exchange
+- **Practical:** Implement RSA, ECDH, digital signatures, Diffie-Hellman
+- **Real-world:** TLS/SSL, blockchain, secure communications
 
 ### Week 6: Hash Functions and Data Integrity
 - **Topics:** MD5, SHA-1, SHA-256, SHA-3, HMAC
@@ -105,9 +110,10 @@ mat354/
 
 ### Software Stack
 - **Python 3.8+** with libraries: `cryptography`, `pycryptodome`, `requests`
-- **Node.js** for web development
+- **Node.js** for web development and Slidev presentations
 - **Git** for version control
 - **Docker** for containerization
+- **Slidev** for interactive presentations
 
 ### Recommended IDEs
 - **Visual Studio Code** with cryptography extensions
@@ -125,6 +131,9 @@ pip install cryptography pycryptodome requests
 
 # Install Node.js dependencies (if needed)
 npm install
+
+# Install Slidev globally
+npm install -g @slidev/cli
 ```
 
 ## 📚 Learning Resources
@@ -173,16 +182,64 @@ Create a complete secure messaging application with:
 npm install -g @slidev/cli
 
 # Run any presentation
+slidev new/lecture1.md
 slidev new/lecture2.md
 slidev new/lecture3.md
+slidev new/lecture4.md
+slidev new/lecture5.md
+slidev new/syllabus.md
 slidev new/kasiski-method.md
 ```
 
-### 3. Practice with Code Examples
+### 3. Generate PDF Files
+```bash
+# Make the build script executable
+chmod +x new/build-pdfs.sh
+
+# Build all presentations to PDF
+./new/build-pdfs.sh
+
+# Build specific presentation
+./new/build-pdfs.sh -f new/lecture5.md
+
+# Build all + create combined PDF + index
+./new/build-pdfs.sh -c -i
+```
+
+### 4. Practice with Code Examples
 - Each lecture includes working Python code
 - Experiment with different parameters
 - Try breaking the implementations
 - Implement your own variations
+
+## 📄 PDF Generation System
+
+The course includes an automated PDF generation system for offline viewing and printing:
+
+### Features
+- **Automatic discovery** of all Slidev presentations
+- **Smart filtering** - only processes valid Slidev files
+- **Batch processing** - build all presentations at once
+- **Individual builds** - build specific presentations
+- **Combined PDF** - merge all presentations into one file
+- **Index generation** - create README with all available PDFs
+
+### Available PDFs
+- `lecture1.pdf` - Introduction to Cryptography
+- `lecture2.pdf` - Classical Ciphers  
+- `lecture3.pdf` - Cryptanalysis and Attacks
+- `lecture4.pdf` - Stream Ciphers and Modern Symmetric Encryption
+- `lecture5.pdf` - Public Key Cryptography and Asymmetric Encryption
+- `syllabus.pdf` - Course Syllabus
+- `kasiski-method.pdf` - Deep Dive: Kasiski Method
+
+### Build Script Options
+```bash
+./new/build-pdfs.sh              # Build all presentations
+./new/build-pdfs.sh -c -i        # Build all + combine + index
+./new/build-pdfs.sh -f file.md   # Build specific file
+./new/build-pdfs.sh --help       # Show all options
+```
 
 ## 📞 Contact Information
 
