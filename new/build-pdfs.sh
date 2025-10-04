@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# Build Script for MAT364 Cryptography Course Slides
-# This script builds all Slidev presentations to PDF format
+# Generic Slidev PDF Builder
+# This script automatically finds and builds all .md files to PDF format
 
 set -e  # Exit on any error
 
-echo "🔐 MAT364 Cryptography Course - PDF Builder"
-echo "=========================================="
+echo "📄 Generic Slidev PDF Builder"
+echo "============================="
 
 # Create output directory
 OUTPUT_DIR="pdf-exports"
@@ -19,14 +19,8 @@ if ! command -v slidev &> /dev/null; then
     echo "✅ Slidev installed successfully"
 fi
 
-# Array of presentation files
-PRESENTATIONS=(
-    "lecture1.md"
-    "lecture2.md" 
-    "lecture3.md"
-    "lecture4.md"
-    "kasiski-method.md"
-)
+# Automatically find all .md files in current directory
+PRESENTATIONS=($(find . -maxdepth 1 -name "*.md" -type f | sort))
 
 # Function to build a single presentation
 build_presentation() {
@@ -41,8 +35,22 @@ build_presentation() {
         return 1
     fi
     
-    # Build PDF with Slidev
-    slidev build "$file" --format pdf --out "$OUTPUT_DIR/$basename.pdf"
+    # Check if file is a Slidev presentation (contains frontmatter)
+    if ! head -n 10 "$file" | grep -q "^---$"; then
+        echo "⚠️  Warning: $file doesn't appear to be a Slidev presentation (no frontmatter), skipping..."
+        return 1
+    fi
+    
+    # Build PDF with Slidev using export command
+    slidev export "$file" --format pdf --output "$OUTPUT_DIR/$basename.pdf"
+    
+    # Check if PDF was created successfully
+    if [ -f "$OUTPUT_DIR/$basename.pdf" ]; then
+        echo "✅ PDF file created: $basename.pdf"
+    else
+        echo "❌ Failed to create PDF: $basename.pdf"
+        return 1
+    fi
     
     if [ $? -eq 0 ]; then
         echo "✅ Successfully built: $basename.pdf"
@@ -88,12 +96,12 @@ create_combined_pdf() {
     
     if command -v pdftk &> /dev/null; then
         # Use pdftk to combine PDFs
-        pdftk "$OUTPUT_DIR"/*.pdf cat output "$OUTPUT_DIR/Combined-Cryptography-Course.pdf"
-        echo "✅ Combined PDF created: Combined-Cryptography-Course.pdf"
+        pdftk "$OUTPUT_DIR"/*.pdf cat output "$OUTPUT_DIR/Combined-Presentations.pdf"
+        echo "✅ Combined PDF created: Combined-Presentations.pdf"
     elif command -v gs &> /dev/null; then
         # Use Ghostscript to combine PDFs
-        gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile="$OUTPUT_DIR/Combined-Cryptography-Course.pdf" "$OUTPUT_DIR"/*.pdf
-        echo "✅ Combined PDF created: Combined-Cryptography-Course.pdf"
+        gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile="$OUTPUT_DIR/Combined-Presentations.pdf" "$OUTPUT_DIR"/*.pdf
+        echo "✅ Combined PDF created: Combined-Presentations.pdf"
     else
         echo "⚠️  Neither pdftk nor Ghostscript found. Skipping combined PDF creation."
         echo "   Install pdftk or Ghostscript to create a combined PDF."
@@ -106,9 +114,9 @@ create_index() {
     echo "📋 Creating index file..."
     
     cat > "$OUTPUT_DIR/README.md" << EOF
-# MAT364 Cryptography Course - PDF Exports
+# Slidev PDF Exports
 
-This directory contains PDF exports of all course presentations.
+This directory contains PDF exports of all Slidev presentations found in the current directory.
 
 ## Available Presentations
 
@@ -158,12 +166,12 @@ show_help() {
     echo "  -a, --all      Build all presentations (default)"
     echo "  -c, --combine  Also create a combined PDF"
     echo "  -i, --index    Also create an index file"
-    echo "  -f, --file     Build specific file (e.g., -f lecture2.md)"
+    echo "  -f, --file     Build specific file (e.g., -f presentation.md)"
     echo ""
     echo "Examples:"
-    echo "  $0                    # Build all presentations"
+    echo "  $0                    # Build all .md files in current directory"
     echo "  $0 -c -i             # Build all + combine + index"
-    echo "  $0 -f lecture2.md    # Build only lecture2.md"
+    echo "  $0 -f presentation.md # Build only specific file"
 }
 
 # Parse command line arguments
