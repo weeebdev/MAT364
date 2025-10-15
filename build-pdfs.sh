@@ -26,6 +26,7 @@ PRESENTATIONS=($(find . -maxdepth 1 -name "*.md" -type f | sort))
 build_presentation() {
     local file=$1
     local basename=$(basename "$file" .md)
+    local output="$OUTPUT_DIR/$basename.pdf"
     
     echo ""
     echo "📄 Building $file..."
@@ -41,11 +42,19 @@ build_presentation() {
         return 1
     fi
     
+    # Skip if PDF already exists and is up-to-date (unless forced)
+    if [ -f "$output" ] && [ "$FORCE" != true ]; then
+        if [ "$output" -nt "$file" ]; then
+            echo "⏭️  Skipping $file (up-to-date PDF already exists)"
+            return 0
+        fi
+    fi
+    
     # Build PDF with Slidev using export command
-    slidev export "$file" --format pdf --output "$OUTPUT_DIR/$basename.pdf"
+    slidev export "$file" --format pdf --output "$output"
     
     # Check if PDF was created successfully
-    if [ -f "$OUTPUT_DIR/$basename.pdf" ]; then
+    if [ -f "$output" ]; then
         echo "✅ PDF file created: $basename.pdf"
     else
         echo "❌ Failed to create PDF: $basename.pdf"
@@ -167,6 +176,7 @@ show_help() {
     echo "  -c, --combine  Also create a combined PDF"
     echo "  -i, --index    Also create an index file"
     echo "  -f, --file     Build specific file (e.g., -f presentation.md)"
+    echo "      --force    Rebuild even if output PDF is up-to-date"
     echo ""
     echo "Examples:"
     echo "  $0                    # Build all .md files in current directory"
@@ -178,6 +188,7 @@ show_help() {
 COMBINE=false
 INDEX=false
 SPECIFIC_FILE=""
+FORCE=false
 
 while [[ $# -gt 0 ]]; do
     case $1 in
@@ -200,6 +211,10 @@ while [[ $# -gt 0 ]]; do
         -f|--file)
             SPECIFIC_FILE="$2"
             shift 2
+            ;;
+        --force)
+            FORCE=true
+            shift
             ;;
         *)
             echo "Unknown option: $1"
