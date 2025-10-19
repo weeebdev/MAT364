@@ -118,40 +118,40 @@ css: unocss
   .slidev-layout {
     font-size: 0.8rem;
   }
-  
+
   .slidev-layout h1 {
     font-size: 1.6rem;
   }
-  
+
   .slidev-layout h2 {
     font-size: 1.3rem;
   }
-  
+
   .slidev-layout h3 {
     font-size: 1.1rem;
   }
-  
+
   .slidev-layout pre {
     font-size: 0.7rem;
     max-height: 15rem;
   }
-  
+
   .animation-container {
     padding: 0.75rem;
   }
-  
+
   .animation-container .w-8, .animation-container .w-12 {
     width: 1.75rem;
     height: 1.75rem;
     font-size: 0.65rem;
   }
-  
+
   .animation-container .w-6 {
     width: 1.25rem;
     height: 1.25rem;
     font-size: 0.55rem;
   }
-  
+
   .task-container {
     padding: 0.75rem;
   }
@@ -167,8 +167,8 @@ css: unocss
 # Stream Ciphers and Modern Symmetric Encryption
 ## MAT364 - Cryptography Course
 
-**Instructor:** Adil Akhmetov  
-**University:** SDU  
+**Instructor:** Adil Akhmetov
+**University:** SDU
 **Week 4**
 
 <div class="pt-6">
@@ -357,7 +357,7 @@ C = 67, R = 82, Y = 89, P = 80, T = 84, O = 79
 **Step 2: XOR with key (5)**
 ```
 67 ⊕ 5 = 70 (F)
-82 ⊕ 5 = 87 (W)  
+82 ⊕ 5 = 87 (W)
 89 ⊕ 5 = 92 (\)  ← Special character!
 80 ⊕ 5 = 85 (U)
 84 ⊕ 5 = 81 (Q)
@@ -476,19 +476,19 @@ class LFSR:
     def __init__(self, seed, taps):
         self.register = seed
         self.taps = taps  # Positions to XOR
-    
+
     def step(self):
         # Calculate feedback
         feedback = 0
         for tap in self.taps:
             feedback ^= (self.register >> tap) & 1
-        
+
         # Shift and insert feedback
         self.register = (self.register >> 1) | (feedback << (len(self.register) - 1))
-        
+
         # Return output bit
         return self.register & 1
-    
+
     def generate_keystream(self, length):
         keystream = []
         for _ in range(length):
@@ -620,14 +620,14 @@ layout: default
 
 <v-clicks>
 
-**Step 1:** [1,0,1] → Output: 1, Feedback: 1⊕1 = 0 → Next: [0,1,0]
-**Step 2:** [0,1,0] → Output: 0, Feedback: 0⊕0 = 0 → Next: [0,0,1]  
-**Step 3:** [0,0,1] → Output: 1, Feedback: 0⊕1 = 1 → Next: [1,0,0]
-**Step 4:** [1,0,0] → Output: 0, Feedback: 1⊕0 = 1 → Next: [1,1,0]
-**Step 5:** [1,1,0] → Output: 0, Feedback: 1⊕1 = 0 → Next: [0,1,1]
-**Step 6:** [0,1,1] → Output: 1, Feedback: 0⊕1 = 1 → Next: [1,0,1]
-**Step 7:** [1,0,1] → Output: 1, Feedback: 1⊕1 = 0 → Next: [0,1,0]
-**Step 8:** [0,1,0] → Output: 0, Feedback: 0⊕0 = 0 → Next: [0,0,1]
+**Step 1:** [1,0,1] → Output: 1, Feedback: 1⊕1 = 0 → Next: [0,1,0]\
+**Step 2:** [0,1,0] → Output: 0, Feedback: 0⊕0 = 0 → Next: [0,0,1]\
+**Step 3:** [0,0,1] → Output: 1, Feedback: 0⊕1 = 1 → Next: [1,0,0]\
+**Step 4:** [1,0,0] → Output: 0, Feedback: 1⊕0 = 1 → Next: [1,1,0]\
+**Step 5:** [1,1,0] → Output: 0, Feedback: 1⊕0 = 1 → Next: [1,1,1]\
+**Step 6:** [1,1,1] → Output: 1, Feedback: 1⊕1 = 0 → Next: [0,1,1]\
+**Step 7:** [0,1,1] → Output: 1, Feedback: 0⊕1 = 1 → Next: [1,0,1]\
+**Step 8:** [1,0,1] → Output: 1, Feedback: 1⊕1 = 0 → Next: [0,1,0]
 
 </v-clicks>
 
@@ -636,7 +636,7 @@ layout: default
      :enter="{ opacity: 1, scale: 1, transition: { delay: 3000, duration: 800 } }"
      class="mt-4 p-4 bg-white rounded-lg shadow-md">
 <div class="text-center">
-<strong class="text-green-600">Answer:</strong> <code class="bg-gray-100 px-2 py-1 rounded">10100110</code>
+<strong class="text-green-600">Answer:</strong> <code class="bg-gray-100 px-2 py-1 rounded">10100111</code>
 </div>
 <div class="text-sm text-gray-600 mt-2">
 Notice the pattern repeats after 7 steps (period = 7)
@@ -678,27 +678,27 @@ class RC4:
         self.key = key
         self.S = list(range(256))
         self._ksa()
-    
+
     def _ksa(self):
         """Key Scheduling Algorithm"""
         j = 0
         for i in range(256):
             j = (j + self.S[i] + self.key[i % len(self.key)]) % 256
             self.S[i], self.S[j] = self.S[j], self.S[i]
-    
+
     def _prga(self, length):
         """Pseudo-Random Generation Algorithm"""
         i = j = 0
         keystream = []
-        
+
         for _ in range(length):
             i = (i + 1) % 256
             j = (j + self.S[i]) % 256
             self.S[i], self.S[j] = self.S[j], self.S[i]
             keystream.append(self.S[(self.S[i] + self.S[j]) % 256])
-        
+
         return keystream
-    
+
     def encrypt(self, plaintext):
         keystream = self._prga(len(plaintext))
         return bytes(a ^ b for a, b in zip(plaintext, keystream))
@@ -741,15 +741,15 @@ def chacha20_quarter_round(state, a, b, c, d):
     state[a] = (state[a] + state[b]) & 0xFFFFFFFF
     state[d] = state[d] ^ state[a]
     state[d] = ((state[d] << 16) | (state[d] >> 16)) & 0xFFFFFFFF
-    
+
     state[c] = (state[c] + state[d]) & 0xFFFFFFFF
     state[b] = state[b] ^ state[c]
     state[b] = ((state[b] << 12) | (state[b] >> 20)) & 0xFFFFFFFF
-    
+
     state[a] = (state[a] + state[b]) & 0xFFFFFFFF
     state[d] = state[d] ^ state[a]
     state[d] = ((state[d] << 8) | (state[d] >> 24)) & 0xFFFFFFFF
-    
+
     state[c] = (state[c] + state[d]) & 0xFFFFFFFF
     state[b] = state[b] ^ state[c]
     state[b] = ((state[b] << 7) | (state[b] >> 25)) & 0xFFFFFFFF
@@ -1046,19 +1046,19 @@ def cbc_encrypt(plaintext, key, iv):
     cipher = AES.new(key, AES.MODE_ECB)
     ciphertext = b''
     prev_block = iv
-    
+
     for i in range(0, len(plaintext), 16):
         block = plaintext[i:i+16]
         # Pad if necessary
         if len(block) < 16:
             block = pad(block, 16)
-        
+
         # XOR with previous ciphertext
         xored = bytes(a ^ b for a, b in zip(block, prev_block))
         encrypted = cipher.encrypt(xored)
         ciphertext += encrypted
         prev_block = encrypted
-    
+
     return ciphertext
 ```
 
@@ -1165,17 +1165,17 @@ def gcm_encrypt(plaintext, key, iv, aad=b''):
     """GCM mode encryption with authentication"""
     # Generate counter blocks
     counter_blocks = generate_counters(iv, len(plaintext))
-    
+
     # Encrypt counter blocks
     cipher = AES.new(key, AES.MODE_ECB)
     keystream = b''.join(cipher.encrypt(ctr) for ctr in counter_blocks)
-    
+
     # XOR with plaintext
     ciphertext = bytes(a ^ b for a, b in zip(plaintext, keystream))
-    
+
     # Calculate authentication tag
     tag = ghash(ciphertext, aad, key)
-    
+
     return ciphertext, tag
 
 def gcm_decrypt(ciphertext, key, iv, tag, aad=b''):
@@ -1184,7 +1184,7 @@ def gcm_decrypt(ciphertext, key, iv, tag, aad=b''):
     expected_tag = ghash(ciphertext, aad, key)
     if tag != expected_tag:
         raise ValueError("Authentication failed")
-    
+
     # Decrypt (same as encryption)
     return gcm_encrypt(ciphertext, key, iv, aad)[0]
 ```
@@ -1242,16 +1242,16 @@ def aes_encrypt(plaintext, key):
     """AES encryption"""
     # Generate random IV
     iv = get_random_bytes(16)
-    
+
     # Create cipher
     cipher = AES.new(key, AES.MODE_CBC, iv)
-    
+
     # Pad plaintext
     padded = pad(plaintext, AES.block_size)
-    
+
     # Encrypt
     ciphertext = cipher.encrypt(padded)
-    
+
     return iv + ciphertext
 
 def aes_decrypt(ciphertext, key):
@@ -1259,13 +1259,13 @@ def aes_decrypt(ciphertext, key):
     # Extract IV
     iv = ciphertext[:16]
     encrypted = ciphertext[16:]
-    
+
     # Create cipher
     cipher = AES.new(key, AES.MODE_CBC, iv)
-    
+
     # Decrypt
     padded = cipher.decrypt(encrypted)
-    
+
     # Remove padding
     return unpad(padded, AES.block_size)
 ```
@@ -1381,7 +1381,7 @@ layout: default
 
 **Available Options:**
 - **AES-128** - 128-bit key, 10 rounds
-- **AES-192** - 192-bit key, 12 rounds  
+- **AES-192** - 192-bit key, 12 rounds
 - **AES-256** - 256-bit key, 14 rounds
 
 **Questions:**
@@ -1483,14 +1483,14 @@ def derive_key(password, salt=None, iterations=100000):
     """Derive key from password using PBKDF2"""
     if salt is None:
         salt = secrets.token_bytes(16)
-    
+
     kdf = PBKDF2HMAC(
         algorithm=hashes.SHA256(),
         length=32,  # 256-bit key
         salt=salt,
         iterations=iterations,
     )
-    
+
     key = kdf.derive(password.encode())
     return key, salt
 
@@ -1526,16 +1526,16 @@ class StreamCipher:
     def __init__(self, key):
         self.key = key
         self.position = 0
-    
+
     def encrypt(self, plaintext):
         """Encrypt plaintext using stream cipher"""
         keystream = self._generate_keystream(len(plaintext))
         return bytes(a ^ b for a, b in zip(plaintext, keystream))
-    
+
     def decrypt(self, ciphertext):
         """Decrypt ciphertext (same as encryption)"""
         return self.encrypt(ciphertext)
-    
+
     def _generate_keystream(self, length):
         """Generate keystream of specified length"""
         # Implementation depends on specific cipher
@@ -1552,7 +1552,7 @@ class BlockCipher:
     def __init__(self, key, mode='CBC'):
         self.key = key
         self.mode = mode
-    
+
     def encrypt(self, plaintext, iv=None):
         """Encrypt plaintext using block cipher"""
         if self.mode == 'ECB':
@@ -1561,7 +1561,7 @@ class BlockCipher:
             return self._cbc_encrypt(plaintext, iv)
         elif self.mode == 'GCM':
             return self._gcm_encrypt(plaintext, iv)
-    
+
     def decrypt(self, ciphertext, iv=None, tag=None):
         """Decrypt ciphertext"""
         if self.mode == 'ECB':
@@ -1658,19 +1658,19 @@ Create a complete stream cipher implementation:
 class LFSRCipher:
     def __init__(self, key):
         self.lfsr = LFSR(key, [3, 1])  # 4-bit LFSR
-    
+
     def encrypt(self, data):
         keystream = self.lfsr.generate_keystream(len(data) * 8)
         result = []
-        
+
         for i, byte in enumerate(data):
             byte_bits = [(byte >> j) & 1 for j in range(8)]
             keystream_bits = keystream[i*8:(i+1)*8]
-            
+
             encrypted_bits = [a ^ b for a, b in zip(byte_bits, keystream_bits)]
             encrypted_byte = sum(bit << j for j, bit in enumerate(encrypted_bits))
             result.append(encrypted_byte)
-        
+
         return bytes(result)
 ```
 
@@ -1714,18 +1714,18 @@ def cbc_encrypt(plaintext, key, iv):
     cipher = AES.new(key, AES.MODE_ECB)
     ciphertext = b''
     prev_block = iv
-    
+
     for i in range(0, len(plaintext), 16):
         block = plaintext[i:i+16]
         if len(block) < 16:
             block = pad(block, 16)
-        
+
         # XOR with previous ciphertext
         xored = bytes(a ^ b for a, b in zip(block, prev_block))
         encrypted = cipher.encrypt(xored)
         ciphertext += encrypted
         prev_block = encrypted
-    
+
     return ciphertext
 
 def cbc_decrypt(ciphertext, key, iv):
@@ -1733,18 +1733,18 @@ def cbc_decrypt(ciphertext, key, iv):
     cipher = AES.new(key, AES.MODE_ECB)
     plaintext = b''
     prev_block = iv
-    
+
     for i in range(0, len(ciphertext), 16):
         block = ciphertext[i:i+16]
-        
+
         # Decrypt block
         decrypted = cipher.decrypt(block)
-        
+
         # XOR with previous ciphertext
         xored = bytes(a ^ b for a, b in zip(decrypted, prev_block))
         plaintext += xored
         prev_block = block
-    
+
     return unpad(plaintext, 16)
 ```
 
@@ -1785,34 +1785,34 @@ Analyze security of different ciphers:
 class SecurityAnalyzer:
     def __init__(self):
         self.english_freq = self._load_english_frequencies()
-    
+
     def analyze_stream_cipher(self, ciphertext):
         """Analyze stream cipher security"""
         # Frequency analysis
         freq = self._frequency_analysis(ciphertext)
-        
+
         # Chi-squared test
         chi_squared = self._chi_squared_test(freq)
-        
+
         # Autocorrelation
         autocorr = self._autocorrelation(ciphertext)
-        
+
         return {
             'frequency_analysis': freq,
             'chi_squared': chi_squared,
             'autocorrelation': autocorr
         }
-    
+
     def analyze_block_cipher(self, ciphertext, block_size=16):
         """Analyze block cipher security"""
         blocks = [ciphertext[i:i+block_size] for i in range(0, len(ciphertext), block_size)]
-        
+
         # Check for repeated blocks (ECB vulnerability)
         repeated_blocks = len(blocks) - len(set(blocks))
-        
+
         # Block frequency analysis
         block_freq = Counter(blocks)
-        
+
         return {
             'repeated_blocks': repeated_blocks,
             'block_frequency': block_freq,
@@ -1861,46 +1861,46 @@ import os
 class PerformanceTester:
     def __init__(self):
         self.results = {}
-    
+
     def test_cipher_performance(self, cipher_class, data_sizes=[1, 10, 100, 1000]):
         """Test cipher performance across different data sizes"""
         results = {}
-        
+
         for size_mb in data_sizes:
             # Generate test data
             test_data = os.urandom(size_mb * 1024 * 1024)
-            
+
             # Test encryption
             start_time = time.time()
             start_memory = psutil.Process().memory_info().rss
-            
+
             cipher = cipher_class(b'test_key_32_bytes_long')
             encrypted = cipher.encrypt(test_data)
-            
+
             end_time = time.time()
             end_memory = psutil.Process().memory_info().rss
-            
+
             # Calculate metrics
             encryption_time = end_time - start_time
             throughput = len(test_data) / encryption_time / (1024 * 1024)  # MB/s
             memory_usage = end_memory - start_memory
-            
+
             results[size_mb] = {
                 'encryption_time': encryption_time,
                 'throughput': throughput,
                 'memory_usage': memory_usage
             }
-        
+
         return results
-    
+
     def compare_ciphers(self, ciphers, data_size=100):
         """Compare multiple ciphers"""
         comparison = {}
-        
+
         for name, cipher_class in ciphers.items():
             results = self.test_cipher_performance(cipher_class, [data_size])
             comparison[name] = results[data_size]
-        
+
         return comparison
 ```
 

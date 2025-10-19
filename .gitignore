@@ -1,3 +1,5 @@
 node_modules
 dist
 quiz1
+bun.lockb
+package.json
