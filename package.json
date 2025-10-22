@@ -1,5 +1,15 @@
 {
-  "dependencies": { "@slidev/theme-default": "^0.25.0" },
+  "name": "mat364-cryptography",
+  "private": true,
+  "scripts": {
+    "dev": "slidev",
+    "build": "slidev build",
+    "export": "slidev export"
+  },
+  "dependencies": {
+    "@slidev/cli": "^0.50.0",
+    "@slidev/theme-default": "^0.25.0"
+  },
   "devDependencies": {
     "playwright-chromium": "^1.55.0"
   }
