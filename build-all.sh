@@ -5,6 +5,22 @@
 
 set -e
 
+# Repository name for GitHub Pages base path
+# Set via: REPO_NAME=mat364 ./build-all.sh
+# Or it will be auto-detected from GitHub Actions
+if [ -z "$REPO_NAME" ]; then
+  # Try to get from GitHub Actions environment
+  if [ -n "$GITHUB_REPOSITORY" ]; then
+    REPO_NAME=$(echo "$GITHUB_REPOSITORY" | cut -d'/' -f2)
+  else
+    # Default repo name - CHANGE THIS to your repo name
+    REPO_NAME="mat364"
+  fi
+fi
+
+echo "🔧 Using repository name: $REPO_NAME"
+echo "   Base path will be: /$REPO_NAME/<presentation>/"
+
 # Create output directory
 rm -rf docs
 mkdir -p docs
@@ -36,7 +52,8 @@ for entry in "${PRESENTATIONS[@]}"; do
   IFS=':' read -r file folder name <<< "$entry"
   if [ -f "$file" ]; then
     echo "📦 Building: $name ($file -> docs/$folder)"
-    bunx slidev build "$file" --base "/$folder/" --out "docs/$folder" 2>/dev/null || {
+    BASE_PATH="/$REPO_NAME/$folder/"
+    bunx slidev build "$file" --base "$BASE_PATH" --out "docs/$folder" 2>/dev/null || {
       echo "⚠️  Warning: Failed to build $file, trying without base..."
       bunx slidev build "$file" --out "docs/$folder" 2>/dev/null || {
         echo "❌ Error: Could not build $file"
@@ -462,16 +479,6 @@ cat > docs/index.html << 'HTMLEOF'
                     <div class="card-arrow">View material →</div>
                 </a>
                 
-                <a href="quiz-lectures6-13/" class="card">
-                    <div class="card-header">
-                        <div class="card-icon quiz">📝</div>
-                        <div>
-                            <div class="card-title">Quiz Review</div>
-                        </div>
-                    </div>
-                    <p class="card-description">Review questions covering Lectures 6-13.</p>
-                    <div class="card-arrow">View quiz →</div>
-                </a>
             </div>
         </section>
         
