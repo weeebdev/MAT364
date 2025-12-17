@@ -4,7 +4,9 @@
   "scripts": {
     "dev": "slidev",
     "build": "slidev build",
-    "export": "slidev export"
+    "export": "slidev export",
+    "build:all": "bash build-all.sh",
+    "preview": "npx serve docs"
   },
   "dependencies": {
     "@slidev/cli": "^0.50.0",
