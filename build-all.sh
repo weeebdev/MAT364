@@ -36,9 +36,9 @@ for entry in "${PRESENTATIONS[@]}"; do
   IFS=':' read -r file folder name <<< "$entry"
   if [ -f "$file" ]; then
     echo "📦 Building: $name ($file -> docs/$folder)"
-    npx slidev build "$file" --base "/$folder/" --out "docs/$folder" 2>/dev/null || {
+    bunx slidev build "$file" --base "/$folder/" --out "docs/$folder" 2>/dev/null || {
       echo "⚠️  Warning: Failed to build $file, trying without base..."
-      npx slidev build "$file" --out "docs/$folder" 2>/dev/null || {
+      bunx slidev build "$file" --out "docs/$folder" 2>/dev/null || {
         echo "❌ Error: Could not build $file"
       }
     }

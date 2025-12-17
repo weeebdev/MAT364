@@ -15,7 +15,7 @@ mkdir -p "$OUTPUT_DIR"
 # Check if Slidev is installed
 if ! command -v slidev &> /dev/null; then
     echo "❌ Slidev is not installed. Installing..."
-    npm install -g @slidev/cli
+    bun install -g @slidev/cli
     echo "✅ Slidev installed successfully"
 fi
 
